@@ -102,4 +102,13 @@ export class AdminService {
   updateSuggestionState(id: number, state: 'accepted' | 'rejected'): Observable<Suggestion> {
     return this.http.patch<Suggestion>(`${this.apiUrl}/admin/suggestions/${id}/`, { state });
   }
+
+  getUsers(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/admin/users/`);
+  }
+
+  updateUserStatus(id: number, updates: { is_staff?: boolean, is_active?: boolean }): Observable<any> {
+    return this.http.patch(`${this.apiUrl}/admin/users/${id}/update/`, updates);
+  }
+
 }

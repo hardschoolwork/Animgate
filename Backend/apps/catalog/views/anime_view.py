@@ -47,24 +47,43 @@ class HomeFeedView(APIView):
         })
 
 
-
 class AnimViewSet(viewsets.ReadOnlyModelViewSet):
-
     lookup_field = 'slug'
     pagination_class = AnimePagination
 
+    # On garde tes backends de filtre
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
-    filterset_fields = ['type', 'status', 'is_trending', 'age_rating']
-    search_fields = ['title', 'title_japanese', 'synopsis', 'studio']
-    ordering_fields = ['release_year', 'rating']
+
+    # ✅ AJOUT : 'release_year' pour permettre le filtre par année natif
+    filterset_fields = ['type', 'status', 'is_trending', 'age_rating', 'release_year']
+
+    # ✅ AJOUT : 'studio__name' si 'studio' est une ForeignKey (sinon garde juste 'studio')
+    search_fields = ['title', 'title_japanese', 'synopsis', 'studio__name']
+
+    # ✅ AJOUT : 'title' pour permettre le tri alphabétique
+    ordering_fields = ['release_year', 'rating', 'title']
     ordering = ['-release_year']
 
     def get_queryset(self):
 
-        return Anim.objects.filter(is_active=True).prefetch_related('genres')
+        queryset = Anim.objects.filter(is_active=True).prefetch_related('genres', 'categories')
+
+        genres_param = self.request.query_params.get('genres', None)
+        if genres_param:
+            genre_ids = [int(g) for g in genres_param.split(',') if g.isdigit()]
+            if genre_ids:
+                queryset = queryset.filter(genres__id__in=genre_ids).distinct()
+
+
+        categories_param = self.request.query_params.get('categories', None)
+        if categories_param:
+            category_ids = [int(c) for c in categories_param.split(',') if c.isdigit()]
+            if category_ids:
+                queryset = queryset.filter(categories__id__in=category_ids).distinct()
+
+        return queryset
 
     def get_serializer_class(self):
-
         if self.action == 'retrieve':
             return AnimDetailSerializer
         return AnimCardSerializer
@@ -74,8 +93,6 @@ class AnimViewSet(viewsets.ReadOnlyModelViewSet):
         anim = self.get_object()
         episodes = anim.episodes.all().order_by('episode_number')
         return Response(EpisodeListSerializer(episodes, many=True).data)
-
-
 
 
 class AdminAnimeViewSet(viewsets.ModelViewSet):

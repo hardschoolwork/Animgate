@@ -1,0 +1,67 @@
+<div class="app">
+  <app-admin-sidebar></app-admin-sidebar>
+  <main class="main">
+    <app-topbar></app-topbar>
+
+    <div class="page-header">
+      <h2><i class='bx bx-user'></i> Gestion des Utilisateurs</h2>
+    </div>
+
+    @if (loading()) { <div class="loader">Chargement des utilisateurs...</div> }
+
+    @if (!loading()) {
+      <div class="table-wrap">
+        <table>
+          <thead>
+          <tr>
+            <th>UTILISATEUR</th>
+            <th>EMAIL</th>
+            <th>INSCRIT LE</th>
+            <th>STATUT</th>
+            <th>ACTIONS</th>
+          </tr>
+          </thead>
+          <tbody>
+            @for (user of users(); track user.id) {
+              <tr [class.deactivated]="!user.is_active">
+                <td>
+                  <div class="user-cell">
+                    <div class="user-avatar">{{ user.username.charAt(0) | uppercase }}</div>
+                    <span class="username">{{ user.username }}</span>
+                  </div>
+                </td>
+                <td>{{ user.email || '—' }}</td>
+                <td>{{ user.date_joined | date:'dd/MM/yyyy' }}</td>
+                <td>
+                  @if (!user.is_active) {
+                    <span class="badge-inactive">Désactivé</span>
+                  } @else if (user.is_staff) {
+                    <span class="badge-admin">Administrateur</span>
+                  } @else {
+                    <span class="badge-user">Utilisateur</span>
+                  }
+                </td>
+                <td>
+                  <div class="action-btns">
+                    <!-- Bouton Admin -->
+                    <button class="action-btn toggle" (click)="toggleAdmin(user)"
+                            [title]="user.is_staff ? 'Retirer les droits admin' : 'Promouvoir administrateur'"
+                            [disabled]="!user.is_active">
+                      <i class='bx' [class.bx-user-check]="!user.is_staff" [class.bx-user-x]="user.is_staff"></i>
+                    </button>
+
+                    <!-- Bouton Désactiver/Réactiver -->
+                    <button class="action-btn deactivate" (click)="toggleActive(user)"
+                            [title]="user.is_active ? 'Désactiver le compte' : 'Réactiver le compte'">
+                      <i class='bx' [class.bx-user-minus]="user.is_active" [class.bx-user-plus]="!user.is_active"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </main>
+</div>

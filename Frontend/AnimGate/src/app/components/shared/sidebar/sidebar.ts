@@ -30,20 +30,20 @@ export class Sidebar implements OnInit, OnDestroy {
   navItems: NavItem[] = [
     { label: 'Découverte', icon: 'bx-compass', route: '/home' },
     { label: 'Catalogue', icon: 'bx-grid-alt', route: '/catalog/all' }, // ✅ Ajouté ici
-    { label: 'Films d\'animation', icon: 'bx-movie', route: '/catalog/movies' },
+    { label: "Films d'animation", icon: 'bx-movie', route: '/catalog/movies' },
     { label: 'Tendances', icon: 'bx-trending-up', route: '/catalog/trending' },
-    { label: 'Sorties récentes', icon: 'bx-time', route: '/catalog/new' }
+    { label: 'Sorties récentes', icon: 'bx-time', route: '/catalog/new' },
   ];
 
   myList: NavItem[] = [
     { label: 'Favoris', icon: 'bx-heart', route: '/favorites' },
-    { label: 'Continuer', icon: 'bx-history', route: '/home', badge: 3 }, // ✅ Badge accepté maintenant
-    { label: 'À regarder', icon: 'bx-bookmark', route: '/home' },
+    { label: 'Continuer', icon: 'bx-history', route: '/continue-watching' },
+    { label: 'À regarder', icon: 'bx-bookmark', route: '/watchlist' },
   ];
 
   settings: NavItem[] = [
     { label: 'Recommandations', icon: 'bx-star', route: '/suggestions' },
-    { label: 'Paramètres', icon: 'bx-cog', route: '/home' },
+    { label: 'Mon Profil', icon: 'bx-user-circle', route: '/profile' },
   ];
 
   ngOnInit(): void {

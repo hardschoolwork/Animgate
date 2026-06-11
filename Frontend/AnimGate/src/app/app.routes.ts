@@ -68,5 +68,19 @@ export const routes: Routes = [
     canActivate: [authGuard],
     loadComponent: () => import('./components/catalog/catalog').then((m) => m.Catalog),
   },
+  {
+    path: 'continue-watching',
+    loadComponent: () =>
+      import('./components/continue-watching/continue-watching').then((m) => m.ContinueWatching),
+  },
+  {
+    path: 'watchlist',
+    loadComponent: () => import('./components/watchlist/watchlist').then((m) => m.Watchlist),
+  },
+  {
+    path: 'profile',
+    loadComponent: () => import('./components/user/profile/profile').then((m) => m.Profile),
+    canActivate: [authGuard],
+  },
   { path: '**', redirectTo: 'landing' },
 ];

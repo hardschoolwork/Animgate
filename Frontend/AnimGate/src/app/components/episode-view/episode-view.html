@@ -45,7 +45,8 @@
           (timeupdate)="onTimeUpdate()"
           (loadedmetadata)="onLoadedMetadata()"
           (play)="isPlaying.set(true)"
-          (pause)="isPlaying.set(false)"
+          (pause)="onVideoPause()"
+          (ended)="onVideoEnded()"
           preload="metadata"
         ></video>
 

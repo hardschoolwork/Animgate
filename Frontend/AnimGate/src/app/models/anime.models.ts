@@ -149,3 +149,22 @@ export interface AnimeDetailAdmin {
   is_featured: boolean;
   is_trending: boolean;
 }
+
+export interface WatchHistory {
+  id: number;
+  episode: number;
+  episode_detail: EpisodeDetail;
+  anime_title: string;
+  anime_slug: string;
+  anime_cover: string | null;
+  progress_percentage: number;
+  last_watched: string;
+  is_completed: boolean;
+}
+
+export interface WatchlistItem {
+  id: number;
+  anime: number;
+  anime_detail: AnimeCard;
+  added_at: string;
+}

@@ -1,0 +1,46 @@
+<div class="app">
+  <app-sidebar></app-sidebar>
+  <main class="main">
+    <app-topbar></app-topbar>
+
+    <div class="page-header">
+      <h2><i class='bx bx-history'></i> Continuer à regarder</h2>
+    </div>
+
+    @if (loading()) { <div class="loader">Chargement...</div> }
+
+    @if (!loading()) {
+      @if (history().length > 0) {
+        <div class="history-grid">
+          @for (item of history(); track item.id) {
+            <div class="history-card" [routerLink]="['/anime', item.anime_slug, 'episode', item.episode_detail.episode_number]">
+              <div class="card-image">
+                @if (item.anime_cover) {
+                  <img [src]="item.anime_cover" [alt]="item.anime_title">
+                } @else {
+                  <div class="no-image"><i class='bx bx-image'></i></div>
+                }
+                <div class="play-overlay"><i class='bx bx-play'></i></div>
+              </div>
+              <div class="card-info">
+                <h3>{{ item.anime_title }}</h3>
+                <p>Épisode {{ item.episode_detail.episode_number }} : {{ item.episode_detail.title }}</p>
+                <div class="progress-bar-bg">
+                  <div class="progress-bar-fill" [style.width.%]="item.progress_percentage"></div>
+                </div>
+                <span class="progress-text">{{ item.progress_percentage | number:'1.0-0' }}% complété</span>
+              </div>
+            </div>
+          }
+        </div>
+      } @else {
+        <div class="empty-state">
+          <i class='bx bx-history'></i>
+          <h3>Aucun historique</h3>
+          <p>Commence à regarder un anime pour le voir apparaître ici.</p>
+          <button class="btn-primary" routerLink="/home">Découvrir des animes</button>
+        </div>
+      }
+    }
+  </main>
+</div>

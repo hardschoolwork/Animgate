@@ -1,0 +1,23 @@
+.app { display: flex; min-height: 100vh; background: var(--bg); }
+.main { margin-left: 240px; padding: 24px 32px; width: calc(100% - 240px); }
+.page-header { margin-bottom: 24px; }
+.page-header h2 { font-size: 22px; font-weight: 700; display: flex; align-items: center; gap: 10px; }
+.page-header h2 i { color: var(--accent); }
+.loader, .empty-state { text-align: center; padding: 60px 20px; color: var(--text2); }
+.empty-state i { font-size: 48px; margin-bottom: 16px; color: var(--accent); opacity: 0.5; }
+.btn-primary { background: var(--accent); color: #fff; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; margin-top: 16px; }
+
+.history-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; }
+.history-card { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; cursor: pointer; transition: transform 0.2s, border-color 0.2s; }
+.history-card:hover { transform: translateY(-4px); border-color: var(--accent); }
+.card-image { position: relative; aspect-ratio: 16/9; background: #111; }
+.card-image img { width: 100%; height: 100%; object-fit: cover; }
+.play-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.4); display: flex; align-items: center; justify-content: center; opacity: 0; transition: 0.2s; font-size: 32px; color: #fff; }
+.history-card:hover .play-overlay { opacity: 1; }
+.card-info { padding: 16px; }
+.card-info h3 { font-size: 16px; font-weight: 600; margin: 0 0 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.card-info p { font-size: 13px; color: var(--text2); margin: 0 0 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.progress-bar-bg { width: 100%; height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden; margin-bottom: 8px; }
+.progress-bar-fill { height: 100%; background: var(--accent); border-radius: 3px; }
+.progress-text { font-size: 12px; color: var(--text2); }
+@media (max-width: 1024px) { .main { margin-left: 0; width: 100%; padding: 20px; } }

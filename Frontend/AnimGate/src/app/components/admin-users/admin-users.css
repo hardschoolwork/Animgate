@@ -1,0 +1,39 @@
+.app { display: flex; min-height: 100vh; background: var(--bg); }
+.main { margin-left: 240px; padding: 24px 32px; width: calc(100% - 240px); }
+.loader { text-align: center; padding: 60px 20px; color: var(--text2); }
+.page-header { margin-bottom: 24px; }
+.page-header h2 { font-size: 22px; font-weight: 700; display: flex; align-items: center; gap: 10px; }
+.page-header h2 i { color: var(--accent); }
+
+.table-wrap { background: var(--panel); border-radius: 12px; border: 1px solid var(--border); overflow: hidden; }
+table { width: 100%; border-collapse: collapse; }
+th { padding: 14px 20px; text-align: left; background: rgba(255,255,255,0.02); color: var(--text2); font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+td { padding: 14px 20px; border-bottom: 1px solid var(--border); font-size: 14px; vertical-align: middle; }
+tr:hover { background: rgba(255,255,255,0.02); }
+tr:last-child td { border-bottom: none; }
+
+.user-cell { display: flex; align-items: center; gap: 12px; }
+.user-avatar { width: 36px; height: 36px; background: var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; font-size: 14px; }
+.username { font-weight: 600; color: #fff; }
+
+.badge-admin { background: rgba(245,158,11,0.15); color: #f59e0b; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 600; }
+.badge-user { background: rgba(255,255,255,0.05); color: var(--text2); padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 600; }
+
+.action-btns { display: flex; gap: 8px; }
+.action-btn { width: 32px; height: 32px; border-radius: 6px; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 16px; transition: 0.2s; }
+.action-btn.toggle { background: rgba(59,130,246,0.15); color: #3b82f6; }
+.action-btn.toggle:hover { background: rgba(59,130,246,0.3); }
+.action-btn.delete { background: rgba(230,32,32,0.15); color: #e62020; }
+.action-btn.delete:hover { background: rgba(230,32,32,0.3); }
+
+@media (max-width: 1024px) { .main { margin-left: 0; width: 100%; padding: 20px; } }
+
+
+tr.deactivated { opacity: 0.5; }
+tr.deactivated .username { text-decoration: line-through; }
+
+.badge-inactive { background: rgba(255,255,255,0.1); color: var(--text2); padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 600; }
+
+.action-btn.deactivate { background: rgba(245,158,11,0.15); color: #f59e0b; }
+.action-btn.deactivate:hover { background: rgba(245,158,11,0.3); }
+.action-btn:disabled { opacity: 0.3; cursor: not-allowed; }

@@ -49,7 +49,7 @@ export class AuthService {
   }
 
   getProfile(): Observable<User | null> {
-    return this.http.post<User>(`${this.apiUrl}/profile`, {}).pipe(
+    return this.http.post<User>(`${this.apiUrl}/profile/`, {}).pipe(
       tap((user) => {
         this.user.set(user);
         if (user.is_staff) {

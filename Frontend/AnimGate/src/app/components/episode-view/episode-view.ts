@@ -124,28 +124,32 @@ export class EpisodeView implements OnInit, OnDestroy {
     this.duration.set(this.video.duration);
   }
 
-  onProgressClick(event: Event): void {
-    if (!this.video) return;
+  onProgressClick(event: MouseEvent | Event): void {
+    if (!this.video || !this.video.duration || isNaN(this.video.duration)) return;
 
-    if (event.type === 'click') {
-      const mouseEvent = event as MouseEvent;
-      const bar = this.progressBar?.nativeElement;
-      if (!bar) return;
-      const rect = bar.getBoundingClientRect();
-      const percent = Math.max(0, Math.min(1, (mouseEvent.clientX - rect.left) / rect.width));
-      this.video.currentTime = percent * this.video.duration;
-    } else if (event.type === 'input') {
-      const target = event.target as HTMLInputElement;
-      const percent = parseFloat(target.value);
-      this.video.currentTime = (percent / 100) * this.video.duration;
-    }
+    // Empêche tout comportement par défaut ou propagation indésirable
+    event.preventDefault();
+    event.stopPropagation();
+
+    const mouseEvent = event as MouseEvent;
+    const bar = this.progressBar?.nativeElement;
+    if (!bar) return;
+
+    const rect = bar.getBoundingClientRect();
+    // Calcul précis de la position de la souris par rapport à la barre
+    const clickX = mouseEvent.clientX - rect.left;
+    const percent = Math.max(0, Math.min(1, clickX / rect.width));
+
+    // Application du nouveau temps
+    this.video.currentTime = percent * this.video.duration;
+    this.currentTime.set(this.video.currentTime);
   }
 
   skip(seconds: number): void {
-    if (!this.video) return;
+    if (!this.video || !this.video.duration) return;
     this.video.currentTime = Math.max(
       0,
-      Math.min(this.video.duration || 0, this.video.currentTime + seconds),
+      Math.min(this.video.duration, this.video.currentTime + seconds),
     );
   }
 
@@ -160,7 +164,7 @@ export class EpisodeView implements OnInit, OnDestroy {
     const container = this.videoPlayer?.nativeElement?.parentElement;
     if (!container) return;
     if (!document.fullscreenElement) {
-      container.requestFullscreen();
+      container.requestFullscreen().catch((err) => console.error(err));
       this.isFullscreen.set(true);
     } else {
       document.exitFullscreen();
@@ -194,4 +198,30 @@ export class EpisodeView implements OnInit, OnDestroy {
       alert('Lien copié !');
     }
   }
+
+  saveProgress(isCompleted: boolean = false): void {
+    if (!this.episode() || !this.video || !this.video.duration) return;
+
+    const progress = (this.video.currentTime / this.video.duration) * 100;
+
+
+    if (progress > 5 || isCompleted) {
+      this.animeService.saveWatchProgress(this.episode()!.id, progress, isCompleted).subscribe({
+        next: () => console.log('Progression sauvegardée'),
+        error: (err) => console.error('Erreur sauvegarde progression:', err),
+      });
+    }
+  }
+
+
+  onVideoPause(): void {
+    this.isPlaying.set(false);
+    this.saveProgress(false);
+  }
+
+  onVideoEnded(): void {
+    this.isPlaying.set(false);
+    this.saveProgress(true);
+  }
+
 }

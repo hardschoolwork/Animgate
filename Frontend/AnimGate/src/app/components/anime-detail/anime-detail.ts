@@ -9,7 +9,7 @@ import { AnimeDetail as AnimeDetailData, Episode, Favorite } from '../../models/
 @Component({
   selector: 'app-anime-detail',
   standalone: true,
-  imports: [CommonModule, Sidebar, Topbar], // ✅ Retiré RouterLink (non utilisé)
+  imports: [CommonModule, Sidebar, Topbar],
   templateUrl: './anime-detail.html',
   styleUrl: './anime-detail.css',
 })
@@ -99,7 +99,6 @@ export class AnimeDetail implements OnInit {
   }
 
   watchEpisode(ep: Episode): void {
-    // ✅ Nouvelle URL : /anime/:slug/episode/:number
     const slug = this.anime()?.slug;
     if (slug) {
       this.router.navigate(['/anime', slug, 'episode', ep.episode_number]);
@@ -121,12 +120,33 @@ export class AnimeDetail implements OnInit {
     return labels[status] || status;
   }
 
-  // ✅ Méthodes pour afficher les genres/catégories proprement
   getGenresLabel(genres: string[]): string {
     return genres && genres.length > 0 ? genres.join(', ') : '—';
   }
 
   getCategoriesLabel(categories: string[]): string {
     return categories && categories.length > 0 ? categories.join(', ') : '—';
+  }
+  share(): void {
+    const shareData = {
+      title: this.anime()?.title || 'AniVerse',
+      text: `Découvre ${this.anime()?.title} sur AniVerse !`,
+      url: window.location.href,
+    };
+
+
+    if (navigator.share) {
+      navigator.share(shareData).catch((err) => console.log('Partage annulé', err));
+    } else {
+
+      navigator.clipboard
+        .writeText(window.location.href)
+        .then(() => {
+          alert('Lien copié dans le presse-papier !');
+        })
+        .catch(() => {
+          alert('Impossible de copier le lien.');
+        });
+    }
   }
 }

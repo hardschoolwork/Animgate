@@ -1,0 +1,21 @@
+/* Réutilise le même style de base que continue-watching.css */
+.app { display: flex; min-height: 100vh; background: var(--bg); }
+.main { margin-left: 240px; padding: 24px 32px; width: calc(100% - 240px); }
+.page-header { margin-bottom: 24px; }
+.page-header h2 { font-size: 22px; font-weight: 700; display: flex; align-items: center; gap: 10px; }
+.page-header h2 i { color: var(--accent); }
+.loader, .empty-state { text-align: center; padding: 60px 20px; color: var(--text2); }
+.empty-state i { font-size: 48px; margin-bottom: 16px; color: var(--accent); opacity: 0.5; }
+.btn-primary { background: var(--accent); color: #fff; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; margin-top: 16px; }
+
+.watchlist-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 24px; }
+.anime-card { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; transition: transform 0.2s; }
+.anime-card:hover { transform: translateY(-4px); }
+.card-image { position: relative; aspect-ratio: 2/3; background: #111; }
+.card-image img { width: 100%; height: 100%; object-fit: cover; }
+.remove-btn { position: absolute; top: 8px; right: 8px; width: 28px; height: 28px; background: rgba(0,0,0,0.7); border: none; border-radius: 50%; color: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 16px; transition: 0.2s; }
+.remove-btn:hover { background: #e62020; }
+.card-info { padding: 12px; cursor: pointer; }
+.card-info h3 { font-size: 14px; font-weight: 600; margin: 0 0 4px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.card-info p { font-size: 12px; color: var(--text2); margin: 0; }
+@media (max-width: 1024px) { .main { margin-left: 0; width: 100%; padding: 20px; } }

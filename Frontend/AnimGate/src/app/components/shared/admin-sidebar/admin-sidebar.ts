@@ -35,6 +35,7 @@ export class AdminSidebar implements OnInit, OnDestroy {
   communityItems: NavItem[] = [
     { label: 'Utilisateurs', icon: 'bx-user', route: '/admin/users' },
     { label: 'Recommandations', icon: 'bx-star', route: '/admin/suggestions' },
+    { label: 'Mon Profil', icon: 'bx-user-circle', route: '/profile' }
   ];
 
   systemItems: NavItem[] = [

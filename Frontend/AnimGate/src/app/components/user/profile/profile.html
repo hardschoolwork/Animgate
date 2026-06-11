@@ -1,0 +1,82 @@
+<div class="app">
+  <app-sidebar></app-sidebar>
+  <main class="main">
+    <app-topbar></app-topbar>
+
+    <div class="page-header">
+      <h2><i class='bx bx-user-circle'></i> Mon Profil</h2>
+    </div>
+
+    <div class="profile-container">
+      <!-- Onglets -->
+      <div class="tabs">
+        <button class="tab-btn" [class.active]="activeTab() === 'info'" (click)="activeTab.set('info')">
+          <i class='bx bx-info-circle'></i> Informations
+        </button>
+        <button class="tab-btn" [class.active]="activeTab() === 'password'" (click)="activeTab.set('password')">
+          <i class='bx bx-lock-alt'></i> Sécurité
+        </button>
+      </div>
+
+      <!-- Contenu : Informations -->
+      @if (activeTab() === 'info') {
+        <div class="tab-content">
+          @if (profileSuccess()) { <div class="alert success">{{ profileSuccess() }}</div> }
+          @if (profileError()) { <div class="alert error">{{ profileError() }}</div> }
+
+          <form (ngSubmit)="saveProfile()" class="form-grid">
+            <div class="form-group">
+              <label>Nom d'utilisateur</label>
+              <input type="text" [(ngModel)]="profileUsername" name="username" required>
+            </div>
+            <div class="form-group">
+              <label>Adresse email</label>
+              <input type="email" [(ngModel)]="profileEmail" name="email">
+            </div>
+            <div class="form-group full-width">
+              <label>Membre depuis</label>
+              <input type="text" [value]="user()?.date_joined | date:'dd MMMM yyyy'" disabled class="disabled-input">
+            </div>
+            <div class="form-actions full-width">
+              <button type="submit" class="btn-primary" [disabled]="profileLoading()">
+                @if (profileLoading()) { <i class='bx bx-loader-alt bx-spin'></i> }
+                @else { <i class='bx bx-save'></i> }
+                Enregistrer les modifications
+              </button>
+            </div>
+          </form>
+        </div>
+      }
+
+      <!-- Contenu : Mot de passe -->
+      @if (activeTab() === 'password') {
+        <div class="tab-content">
+          @if (passwordSuccess()) { <div class="alert success">{{ passwordSuccess() }}</div> }
+          @if (passwordError()) { <div class="alert error">{{ passwordError() }}</div> }
+
+          <form (ngSubmit)="savePassword()" class="form-grid">
+            <div class="form-group full-width">
+              <label>Mot de passe actuel *</label>
+              <input type="password" [(ngModel)]="oldPassword" name="oldPassword" required>
+            </div>
+            <div class="form-group">
+              <label>Nouveau mot de passe *</label>
+              <input type="password" [(ngModel)]="newPassword" name="newPassword" required minlength="8">
+            </div>
+            <div class="form-group">
+              <label>Confirmer le nouveau mot de passe *</label>
+              <input type="password" [(ngModel)]="confirmPassword" name="confirmPassword" required>
+            </div>
+            <div class="form-actions full-width">
+              <button type="submit" class="btn-primary" [disabled]="passwordLoading()">
+                @if (passwordLoading()) { <i class='bx bx-loader-alt bx-spin'></i> }
+                @else { <i class='bx bx-key'></i> }
+                Changer le mot de passe
+              </button>
+            </div>
+          </form>
+        </div>
+      }
+    </div>
+  </main>
+</div>

@@ -11,6 +11,10 @@ import {
   Favorite,
   Suggestion,
   AnimeCard,
+  WatchlistItem,
+  WatchHistory,
+  Genre,
+  Category,
 } from '../models/anime.models';
 
 @Injectable({ providedIn: 'root' })
@@ -34,7 +38,14 @@ export class AnimeService {
     return this.http.get<EpisodeDetail>(`${this.apiUrl}/anim/episode/${id}`);
   }
 
-  // ✅ Méthode corrigée avec tous les paramètres de filtrage
+  getGenres(): Observable<Genre[]> {
+    return this.http.get<Genre[]>(`${this.apiUrl}/genres/`);
+  }
+
+  getCategories(): Observable<Category[]> {
+    return this.http.get<Category[]>(`${this.apiUrl}/categories/`);
+  }
+
   getAnimes(params?: {
     type?: string;
     status?: string;
@@ -88,4 +99,43 @@ export class AnimeService {
   submitSuggestion(suggested_anim: string, message: string): Observable<Suggestion> {
     return this.http.post<Suggestion>(`${this.apiUrl}/suggestions/`, { suggested_anim, message });
   }
+
+  // === WATCH HISTORY ===
+  saveWatchProgress(
+    episodeId: number,
+    progress: number,
+    isCompleted: boolean = false,
+  ): Observable<any> {
+    return this.http.post(`${this.apiUrl}/watch-history/`, {
+      episode: episodeId,
+      progress_percentage: progress,
+      is_completed: isCompleted,
+    });
+  }
+
+  getWatchHistory(): Observable<WatchHistory[]> {
+    return this.http.get<WatchHistory[]>(`${this.apiUrl}/watch-history/`);
+  }
+
+  // === WATCHLIST ===
+  getWatchlist(): Observable<WatchlistItem[]> {
+    return this.http.get<WatchlistItem[]>(`${this.apiUrl}/watchlist/`);
+  }
+
+  addToWatchlist(animeId: number): Observable<WatchlistItem> {
+    return this.http.post<WatchlistItem>(`${this.apiUrl}/watchlist/`, { anime: animeId });
+  }
+
+  removeFromWatchlist(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/watchlist/${id}/`);
+  }
+
+  updateProfile(data: { username: string; email: string }): Observable<any> {
+    return this.http.patch(`${this.apiUrl}/updateProfile/`, data);
+  }
+
+  changePassword(data: { old_password: string; new_password: string; confirm_password: string }): Observable<any> {
+    return this.http.post(`${this.apiUrl}/change-password/`, data);
+  }
+
 }

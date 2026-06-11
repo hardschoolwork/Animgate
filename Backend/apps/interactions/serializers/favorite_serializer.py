@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from apps.catalog.serializers import AnimCardSerializer
+from ...catalog.serializers.anime_serializer import AnimCardSerializer
 from ..models.favorite import Favorite
 
 

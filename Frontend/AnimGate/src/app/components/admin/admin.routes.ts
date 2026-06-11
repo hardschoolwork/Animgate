@@ -36,4 +36,9 @@ export const ADMIN_ROUTES: Routes = [
     loadComponent: () =>
       import('./admin-taxonomies/admin-taxonomies').then((m) => m.AdminTaxonomies),
   },
+
+  {
+    path: 'users',
+    loadComponent: () => import('../admin-users/admin-users').then((m) => m.AdminUsers),
+  },
 ];
