@@ -1,0 +1,31 @@
+<div class="slider-wrap" [style.height]="height">
+  <button class="arr l" (click)="prev()"><i class="fas fa-chevron-left"></i></button>
+  <button class="arr r" (click)="next()"><i class="fas fa-chevron-right"></i></button>
+
+  @for (item of items; track item.id; let i = $index) {
+    <div class="slide" [class.active]="currentIndex() === i"
+         [style.backgroundImage]="'url(' + item.banner_image
+          + ')'">
+      <div class="slide-content">
+        <div class="tags">
+          @for (g of item.genres; track g.id) {
+            <span class="tag">{{ g.name }}</span>
+          }
+        </div>
+        <h1>{{ item.title }}</h1>
+        <p>{{ item.synopsis | slice:0:110 }}...</p>
+        <div class="btns-row">
+          <button class="btn btn-out"><i class="fas fa-heart"></i> Favori</button>
+          <button class="btn btn-red"><i class="fas fa-play"></i> Regarder maintenant</button>
+          <button class="btn btn-out"><i class="fas fa-info-circle"></i> En savoir plus</button>
+        </div>
+      </div>
+    </div>
+  }
+
+  <div class="dots">
+    @for (_ of items; track $index; let i = $index) {
+      <div class="dot" [class.active]="currentIndex() === i" (click)="goTo(i)"></div>
+    }
+  </div>
+</div>

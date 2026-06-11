@@ -1,0 +1,45 @@
+<div class="app">
+  <app-admin-sidebar></app-admin-sidebar>
+  <main class="main">
+    <app-topbar></app-topbar>
+
+    <div class="page-header">
+      <h2><i class='bx bx-star'></i> Recommandations</h2>
+    </div>
+
+    @if (loading()) { <div class="loader">Chargement...</div> }
+
+    @if (!loading()) {
+      <div class="filters">
+        <!-- ✅ 4. Boucle sur le tableau typé, plus besoin de cast -->
+        @for (status of filterOptions; track status) {
+          <button class="filter-btn" [class.active]="filterStatus() === status" (click)="filterStatus.set(status)">
+            {{ getStateLabel(status) }}
+          </button>
+        }
+      </div>
+
+      <div class="suggestions-list">
+        @for (s of filteredSuggestions(); track s.id) {
+          <div class="suggestion-card">
+            <div class="suggestion-header">
+              <h3>{{ s.suggested_anim }}</h3>
+              <span class="badge" [class]="s.state">{{ getStateLabel(s.state) }}</span>
+            </div>
+            <p class="message">{{ s.message }}</p>
+
+            @if (s.state === 'pending') {
+              <div class="actions">
+                <button class="btn-accept" (click)="handleAction(s, 'accepted')"><i class='bx bx-check'></i> Accepter</button>
+                <button class="btn-reject" (click)="handleAction(s, 'rejected')"><i class='bx bx-x'></i> Refuser</button>
+              </div>
+            }
+          </div>
+        }
+        @if (filteredSuggestions().length === 0) {
+          <div class="empty-state">Aucune recommandation pour ce filtre.</div>
+        }
+      </div>
+    }
+  </main>
+</div>

@@ -1,0 +1,46 @@
+<div class="app">
+  <app-sidebar></app-sidebar>
+  <main class="main">
+    <app-topbar></app-topbar>
+
+    <div class="page-header">
+      <h2><i class='bx bx-grid-alt'></i> {{ pageTitle() }}</h2>
+    </div>
+
+    @if (loading()) {
+      <div class="loader">Chargement...</div>
+    }
+
+    @if (!loading() && animes().length > 0) {
+      <div class="cards-grid">
+        @for (anime of animes(); track anime.slug) {
+          <div class="card" [routerLink]="['/anime', anime.slug]">
+            <div class="card-img">
+              @if (anime.cover_image) {
+                <img [src]="anime.cover_image" [alt]="anime.title">
+              } @else {
+                <div class="no-image"><i class='bx bx-image'></i></div>
+              }
+              <div class="play-overlay">
+                <div class="play-btn"><i class='bx bx-play'></i></div>
+              </div>
+            </div>
+            <div class="card-info">
+              <div class="card-title">{{ anime.title }}</div>
+              <div class="card-meta">
+                <span>{{ anime.release_year || '—' }}</span>
+                <span class="rating"><i class='bx bxs-star'></i> {{ anime.rating }}</span>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    } @else if (!loading()) {
+      <div class="empty-state">
+        <i class='bx bx-grid-alt'></i>
+        <h3>Aucun résultat</h3>
+        <p>Aucun anime ne correspond à ce filtre pour le moment.</p>
+      </div>
+    }
+  </main>
+</div>

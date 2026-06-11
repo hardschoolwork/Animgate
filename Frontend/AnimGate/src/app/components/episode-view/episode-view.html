@@ -1,0 +1,159 @@
+<div class="app">
+  <app-sidebar></app-sidebar>
+
+  <main class="main">
+    <app-topbar></app-topbar>
+
+    @if (loading()) {
+      <div class="loader">Chargement de l'épisode...</div>
+    }
+
+    @if (error()) {
+      <div class="error-container">
+        <i class='bx bx-error-circle'></i>
+        <h2>Oups, une erreur est survenue</h2>
+        <p>{{ error() }}</p>
+        <button class="btn btn-outline" routerLink="/home">
+          <i class='bx bx-arrow-back'></i> Retour à l'accueil
+        </button>
+      </div>
+    }
+
+    @if (episode(); as ep) {
+      <!-- BREADCRUMB -->
+      <div class="breadcrumb">
+        <a routerLink="/home"><i class='bx bx-home'></i> Accueil</a>
+        <i class='bx bx-chevron-right'></i>
+        <a [routerLink]="['/anime', animSlug]">{{ episode()?.anim_title || animSlug }}</a>
+        <i class='bx bx-chevron-right'></i>
+        <span>Épisode {{ episode()?.episode_number }}</span>
+      </div>
+
+      <!-- LECTEUR VIDÉO CUSTOM -->
+      <div class="player-container">
+        <!-- Background flouté si thumbnail -->
+        @if (ep.thumbnail || ep.anim_cover) {
+          <div class="player-bg" [style.backgroundImage]="'url(' + (ep.thumbnail || ep.anim_cover) + ')'"></div>
+        }
+
+        <video
+          #videoPlayer
+          class="player-video"
+          [src]="ep.episode_video || ''"
+          [poster]="ep.thumbnail || ep.anim_cover || ''"
+          (click)="togglePlay()"
+          (timeupdate)="onTimeUpdate()"
+          (loadedmetadata)="onLoadedMetadata()"
+          (play)="isPlaying.set(true)"
+          (pause)="isPlaying.set(false)"
+          preload="metadata"
+        ></video>
+
+        <!-- Overlay central (gros bouton play) -->
+        @if (!isPlaying()) {
+          <div class="player-center" (click)="togglePlay()">
+            <div class="play-big">
+              <i class='bx bx-play'></i>
+            </div>
+            <div class="player-title">{{ ep.title }}</div>
+          </div>
+        }
+
+        <!-- Contrôles en bas -->
+        <div class="player-controls">
+          <div class="controls-top">
+            <!-- Barre de progression cliquable -->
+            <div class="progress-wrap" (click)="onProgressClick($event)">
+              <div class="progress-bar">
+                <div class="progress-fill" [style.width.%]="progressPercent"></div>
+              </div>
+              <input
+                #progressBar
+                type="range"
+                min="0"
+                max="100"
+                step="0.1"
+                [value]="progressPercent"
+                class="progress-range"
+                (input)="onProgressClick($event)"
+              >
+            </div>
+          </div>
+
+          <div class="controls-bottom">
+            <div class="controls-left">
+              <button class="ctrl-btn" (click)="skip(-10)" title="Reculer 10s">
+                <i class='bx bx-rewind'></i>
+              </button>
+              <button class="ctrl-btn play-btn" (click)="togglePlay()">
+                <i class='bx' [class.bx-play]="!isPlaying()" [class.bx-pause]="isPlaying()"></i>
+              </button>
+              <button class="ctrl-btn" (click)="skip(10)" title="Avancer 10s">
+                <i class='bx bx-fast-forward'></i>
+              </button>
+
+              <span class="time-display">
+                {{ formatTime(currentTime()) }} / {{ formatTime(duration()) }}
+              </span>
+            </div>
+
+            <div class="controls-right">
+              <div class="volume-wrap">
+                <i class='bx bx-volume-full ctrl-icon'></i>
+                <input
+                  type="range"
+                  min="0"
+                  max="1"
+                  step="0.05"
+                  [value]="volume()"
+                  (input)="onVolumeChange($event)"
+                  class="volume-slider"
+                >
+              </div>
+              <button class="ctrl-btn" (click)="toggleFullscreen()" title="Plein écran">
+                <i class='bx' [class.bx-fullscreen]="!isFullscreen()" [class.bx-exit-fullscreen]="isFullscreen()"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- INFOS ÉPISODE -->
+      <div class="episode-header">
+        <div>
+          <h1>Épisode {{ ep.episode_number }} : {{ ep.title }}</h1>
+          <div class="ep-meta">
+            <span><i class='bx bx-time'></i> {{ ep.duration_minutes }} min</span>
+            @if (ep.release_date) {
+              <span><i class='bx bx-calendar'></i> {{ ep.release_date | date:'dd MMM yyyy' }}</span>
+            }
+          </div>
+        </div>
+        <div class="header-actions">
+          <button class="btn btn-red" (click)="share()">
+            <i class='bx bx-share-alt'></i> Partager
+          </button>
+        </div>
+      </div>
+
+      @if (ep.description) {
+        <div class="description">
+          <h3><i class='bx bx-info-circle'></i> Description</h3>
+          <p>{{ ep.description }}</p>
+        </div>
+      }
+
+      <!-- NAVIGATION EPISODES -->
+      <div class="nav-eps">
+        <button class="nav-btn" [disabled]="!prevEp()" (click)="navigateTo(prevEp())">
+          <i class='bx bx-arrow-back'></i>
+          <span><small>Précédent</small><strong>Ép. {{ prevEp()?.episode_number }}</strong></span>
+        </button>
+        <button class="nav-btn next" [disabled]="!nextEp()" (click)="navigateTo(nextEp())">
+          <span><small>Suivant</small><strong>Ép. {{ nextEp()?.episode_number }}</strong></span>
+          <i class='bx bx-arrow-forward'></i>
+        </button>
+      </div>
+    }
+  </main>
+</div>

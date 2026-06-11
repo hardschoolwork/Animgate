@@ -1,0 +1,43 @@
+<div class="app">
+  <app-sidebar></app-sidebar>
+  <main class="main">
+    <app-topbar></app-topbar>
+
+    @if (loading()) {
+      <div class="loader">Chargement du flux...</div>
+    }
+
+    @if (feed(); as f) {
+
+      <!-- Section 1 : En ce moment / Tendances -->
+      <section class="section">
+        <div class="section-header">
+          <h3><i class='bx bx-play-circle'></i> En ce moment</h3>
+          <a routerLink="/catalog/all" class="see-all">Voir tout</a>
+        </div>
+        <app-section-block [section]="f.hero"></app-section-block>
+      </section>
+
+      <!-- Section 2 : Films d'animation -->
+      <section class="section">
+        <div class="section-header">
+          <h3><i class='bx bx-movie'></i> Films d'animation</h3>
+          <a routerLink="/catalog/movies" class="see-all">Voir tout</a>
+        </div>
+        <app-section-block [section]="f.movies"></app-section-block>
+      </section>
+
+      <!-- Section 3 : Sorties récentes -->
+      <section class="section">
+        <div class="section-header">
+          <h3><i class='bx bx-time'></i> Sorties récentes</h3>
+          <a routerLink="/catalog/new" class="see-all">Voir tout</a>
+        </div>
+        <app-section-block [section]="f.new_releases"></app-section-block>
+      </section>
+
+
+
+    }
+  </main>
+</div>

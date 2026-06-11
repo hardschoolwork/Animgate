@@ -1,0 +1,40 @@
+:host { display: block; }
+.auth-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+  padding: 20px;
+}
+.auth-box {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 40px;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+}
+.logo-header { font-size: 24px; font-weight: 800; text-align: center; margin-bottom: 24px; }
+.logo-header span { color: var(--accent); background: rgba(230,32,32,0.15); padding: 2px 8px; border-radius: 6px; }
+.auth-box h2 { font-size: 24px; text-align: center; margin-bottom: 8px; }
+.subtitle { text-align: center; color: var(--text2); margin-bottom: 32px; font-size: 14px; }
+.auth-form { display: flex; flex-direction: column; gap: 16px; }
+.form-group label { display: block; font-size: 13px; color: var(--text2); margin-bottom: 6px; font-weight: 500; }
+.form-group input {
+  width: 100%; padding: 12px; background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border); border-radius: 8px; color: #fff;
+  font-size: 14px; outline: none; transition: 0.2s;
+}
+.form-group input:focus { border-color: var(--accent); background: rgba(255,255,255,0.06); }
+.btn { padding: 12px; border-radius: 8px; font-weight: 600; cursor: pointer; border: none; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 14px; transition: 0.2s; }
+.btn-red { background: var(--accent); color: #fff; }
+.btn-red:hover:not(:disabled) { background: #ff3333; }
+.btn-full { width: 100%; }
+.btn:disabled { opacity: 0.6; cursor: not-allowed; }
+.alert-error { background: rgba(230,32,32,0.15); color: #ff4d4d; padding: 12px; border-radius: 8px; font-size: 13px; text-align: center; margin-bottom: 16px; border: 1px solid rgba(230,32,32,0.3); }
+.auth-footer { text-align: center; margin-top: 20px; font-size: 14px; color: var(--text2); }
+.link-accent { color: var(--accent); font-weight: 600; cursor: pointer; text-decoration: none; }
+.link-muted { color: var(--text2); cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; margin-top: 8px; }
+.link-muted:hover { color: #fff; }

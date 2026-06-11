@@ -1,0 +1,104 @@
+.app { display: flex; min-height: 100vh; background: var(--bg); }
+.main { margin-left: 240px; padding: 24px 32px; width: calc(100% - 240px); min-height: 100vh; }
+.loader { text-align: center; padding: 60px 20px; color: var(--text2); }
+
+.page-header { margin-bottom: 28px; }
+.page-header h2 { font-size: 22px; font-weight: 700; display: flex; align-items: center; gap: 10px; }
+.page-header h2 i { color: var(--accent); }
+
+.taxonomies-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 24px;
+}
+
+.taxonomy-card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.card-header h3 { font-size: 18px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+.card-header h3 i { color: var(--accent); }
+.count {
+  background: rgba(255,255,255,0.1);
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.add-form {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+.add-form input {
+  flex: 1;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  padding: 10px 14px;
+  border-radius: 8px;
+  color: #fff;
+  outline: none;
+  font-size: 14px;
+}
+.add-form input:focus { border-color: var(--accent); }
+
+.btn-add-small {
+  width: 42px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  transition: 0.2s;
+}
+.btn-add-small:hover:not(:disabled) { background: #ff3333; }
+.btn-add-small:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.item-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 400px;
+  overflow-y: auto;
+}
+.item-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 12px;
+  background: rgba(255,255,255,0.03);
+  border-radius: 8px;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+.item-list li:hover { background: rgba(255,255,255,0.06); }
+
+.btn-delete {
+  background: transparent;
+  border: none;
+  color: var(--text2);
+  cursor: pointer;
+  font-size: 16px;
+  padding: 4px;
+  border-radius: 4px;
+  transition: 0.2s;
+}
+.btn-delete:hover { color: #e62020; background: rgba(230,32,32,0.1); }
+
+@media (max-width: 1024px) {
+  .main { margin-left: 0; width: 100%; padding: 20px; }
+}

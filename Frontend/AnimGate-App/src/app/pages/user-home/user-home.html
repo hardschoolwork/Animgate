@@ -1,0 +1,40 @@
+<div class="app-layout">
+  <app-sidebar></app-sidebar>
+  <main class="main-content">
+    <app-topbar></app-topbar>
+
+    @if (feed(); as data) {
+      <section class="section-block">
+        <div class="sec-head"><h2>🎬 En ce moment</h2></div>
+        <app-slider [items]="data.hero.slides"></app-slider>
+        <div class="grid">
+          @for (a of data.hero.cards; track a.id) {
+            <app-anime-card [anime]="a"></app-anime-card>
+          }
+        </div>
+      </section>
+
+      <section class="section-block">
+        <div class="sec-head"><h2>🍿 Films d'animation</h2><span class="see">Voir tout</span></div>
+        <app-slider [items]="data.movies.slides"></app-slider>
+        <div class="grid">
+          @for (a of data.movies.cards; track a.id) {
+            <app-anime-card [anime]="a"></app-anime-card>
+          }
+        </div>
+      </section>
+
+      <section class="section-block">
+        <div class="sec-head"><h2>📀 Sorties récentes</h2><span class="see">Voir tout</span></div>
+        <app-slider [items]="data.new_releases.slides"></app-slider>
+        <div class="grid">
+          @for (a of data.new_releases.cards; track a.id) {
+            <app-anime-card [anime]="a"></app-anime-card>
+          }
+        </div>
+      </section>
+    } @else {
+      <div class="loader">Chargement du catalogue...</div>
+    }
+  </main>
+</div>

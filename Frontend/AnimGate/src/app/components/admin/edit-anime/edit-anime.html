@@ -1,0 +1,125 @@
+<div class="app">
+  <app-admin-sidebar></app-admin-sidebar>
+  <main class="main">
+    <app-topbar></app-topbar>
+
+    <div class="page-header">
+      <h2><i class='bx bx-edit'></i> Modifier : {{ title || '...' }}</h2>
+      <button class="btn-back" routerLink="/admin/dashboard">
+        <i class='bx bx-arrow-back'></i> Retour
+      </button>
+    </div>
+
+    @if (loading()) {
+      <div class="loader">Chargement des données...</div>
+    }
+
+    @if (success()) {
+      <div class="alert-success">
+        <i class='bx bx-check-circle'></i>
+        <span>Modifications enregistrées ! Redirection...</span>
+      </div>
+    }
+
+    @if (error()) {
+      <div class="alert-error">
+        <i class='bx bx-error-circle'></i>
+        <span>{{ error() }}</span>
+      </div>
+    }
+
+    @if (!loading()) {
+      <form class="form-container" (ngSubmit)="onSubmit()">
+
+        <!-- INFOS GÉNÉRALES -->
+        <div class="form-section">
+          <h3><i class='bx bx-info-circle'></i> Informations générales</h3>
+          <div class="form-grid">
+            <div class="form-group required">
+              <label>Titre *</label>
+              <input type="text" [(ngModel)]="title" name="title" required>
+            </div>
+            <div class="form-group">
+              <label>Titre japonais</label>
+              <input type="text" [(ngModel)]="title_japanese" name="title_japanese">
+            </div>
+            <div class="form-group">
+              <label>Studio</label>
+              <input type="text" [(ngModel)]="studio" name="studio">
+            </div>
+            <div class="form-group">
+              <label>Type</label>
+              <select [(ngModel)]="type" name="type">
+                <option value="series">Série</option>
+                <option value="movie">Film</option>
+                <option value="ova">OVA</option>
+                <option value="ona">ONA</option>
+                <option value="special">Spécial</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Statut</label>
+              <select [(ngModel)]="status" name="status">
+                <option value="ongoing">En cours</option>
+                <option value="completed">Terminé</option>
+                <option value="upcoming">À venir</option>
+                <option value="hiatus">En pause</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Tranche d'âge</label>
+              <select [(ngModel)]="age_rating" name="age_rating">
+                <option value="all">Tout public</option>
+                <option value="pg13">13 ans et plus</option>
+                <option value="pg16">16 ans et plus</option>
+                <option value="r18">18 ans et plus</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Durée épisode (min)</label>
+              <input type="number" [(ngModel)]="episode_duration" name="episode_duration" min="1" max="180">
+            </div>
+            <div class="form-group">
+              <label>Année de sortie</label>
+              <input type="number" [(ngModel)]="release_year" name="release_year" min="1950" max="2099">
+            </div>
+            <div class="form-group full-width">
+              <label>Synopsis</label>
+              <textarea [(ngModel)]="synopsis" name="synopsis" rows="4"></textarea>
+            </div>
+            <div class="form-group full-width">
+              <label>Lien Trailer YouTube</label>
+              <input type="url" [(ngModel)]="trailer_url" name="trailer_url">
+            </div>
+          </div>
+        </div>
+
+        <!-- ✅ MISE EN AVANT -->
+        <div class="form-section">
+          <h3><i class='bx bx-star'></i> Mise en avant</h3>
+          <div class="toggles-grid">
+            <label class="toggle-item">
+              <input type="checkbox" [(ngModel)]="is_featured" name="is_featured">
+              <span class="toggle-label">
+                <i class='bx bx-slider-alt'></i> Hero Slider (is_featured)
+              </span>
+            </label>
+
+          </div>
+        </div>
+
+        <!-- ACTIONS -->
+        <div class="form-actions">
+          <button type="button" class="btn btn-cancel" routerLink="/admin/dashboard">Annuler</button>
+          <button type="submit" class="btn btn-submit" [disabled]="saving()">
+            @if (saving()) {
+              <i class='bx bx-loader-alt bx-spin'></i> Enregistrement...
+            } @else {
+              <i class='bx bx-check'></i> Enregistrer les modifications
+            }
+          </button>
+        </div>
+      </form>
+    }
+  </main>
+</div>

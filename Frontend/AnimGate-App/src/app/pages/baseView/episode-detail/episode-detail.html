@@ -1,0 +1,63 @@
+<div class="page-wrapper" [class.loaded]="!loading()">
+  <app-sidebar></app-sidebar>
+
+  <main class="main-content">
+    <app-topbar></app-topbar>
+
+    @if (episode(); as ep) {
+      <div class="breadcrumb">
+        @if (episode(); as ep) {
+          @if (ep.anim_slug) {
+            <a [routerLink]="['/anime', ep.anim_slug]">
+              <i class="fas fa-arrow-left"></i> Retour à l'anime
+            </a>
+          } @else {
+            <span style="color:var(--text2); font-size:13px;">Lien de retour en chargement...</span>
+          }
+        } @else {
+          <span style="color:var(--text2); font-size:13px;">Épisode en chargement...</span>
+        }
+      </div>
+
+      <div class="video-container">
+        <div class="video-placeholder">
+          <i class="fas fa-play-circle"></i>
+          <span>Lecteur {{ ep.title }}</span>
+        </div>
+        <div class="video-overlay">
+          <div class="controls">
+            <div class="play-btn"><i class="fas fa-play"></i></div>
+            <div class="progress-bar"><div class="progress-fill"></div></div>
+            <span class="time">00:00 / {{ ep.duration_minutes }}:00</span>
+          </div>
+          <div class="controls">
+            <i class="fas fa-volume-up icon"></i>
+            <i class="fas fa-expand icon"></i>
+          </div>
+        </div>
+      </div>
+
+      <div class="episode-info">
+        <h1>Épisode {{ ep.episode_number }} : {{ ep.title }}</h1>
+        <div class="meta">
+          <span><i class="far fa-clock"></i> {{ ep.duration_minutes }} min</span>
+          <span><i class="far fa-calendar"></i> {{ ep.release_date | date:'yyyy' }}</span>
+        </div>
+        <p class="description">{{ ep.description }}</p>
+
+        <div class="episode-nav">
+          <button class="nav-btn" [disabled]="!prevEp()" (click)="navigateTo(prevEp())">
+            <i class="fas fa-arrow-left"></i> Ép. {{ prevEp()?.episode_number }}
+          </button>
+          <button class="nav-btn" [disabled]="!nextEp()" (click)="navigateTo(nextEp())" style="margin-left:auto;">
+            Ép. {{ nextEp()?.episode_number }} <i class="fas fa-arrow-right"></i>
+          </button>
+        </div>
+      </div>
+    }
+
+    @if (loading()) {
+      <div class="loader">Chargement de l'épisode...</div>
+    }
+  </main>
+</div>

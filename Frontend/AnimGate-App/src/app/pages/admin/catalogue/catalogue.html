@@ -1,0 +1,25 @@
+<div class="table-header">
+  <h3>Catalogue Animes</h3>
+  <button routerLink="/admin/add" class="btn btn-red"><i class="fas fa-plus"></i> Ajouter</button>
+</div>
+
+<table class="admin-table">
+  <thead>
+  <tr><th>Titre</th><th>Genres</th><th>Type</th><th>Statut</th><th>Note</th><th>Actions</th></tr>
+  </thead>
+  <tbody>
+    @for (a of animes; track a.id) {
+      <tr>
+        <td><b>{{ a.title }}</b></td>
+        <td>{{ a.genres }}</td>
+        <td>{{ a.type }}</td>
+        <td><span class="badge {{ a.status === 'En cours' ? 'success' : 'default' }}">{{ a.status }}</span></td>
+        <td style="color: #ffb800;"><i class="fas fa-star"></i> {{ a.rating }}</td>
+        <td>
+          <button class="btn-icon" title="Modifier"><i class="fas fa-pen"></i></button>
+          <button class="btn-icon delete" title="Supprimer"><i class="fas fa-trash"></i></button>
+        </td>
+      </tr>
+    }
+  </tbody>
+</table>

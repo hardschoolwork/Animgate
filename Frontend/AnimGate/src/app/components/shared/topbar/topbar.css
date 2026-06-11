@@ -1,0 +1,120 @@
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 28px;
+}
+.search-wrap {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  padding: 10px 16px;
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 320px;
+}
+.search-wrap input {
+  background: transparent;
+  border: none;
+  color: #fff;
+  outline: none;
+  flex: 1;
+}
+.topbar-right {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+.icon {
+  color: var(--text2);
+  cursor: pointer;
+  font-size: 20px;
+  transition: 0.2s;
+}
+.icon:hover { color: #fff; }
+.avatar {
+  width: 32px;
+  height: 32px;
+  background: var(--accent);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 12px;
+}
+.search-wrap {
+  display: flex;
+  align-items: center;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0 12px;
+  width: 300px;
+  transition: 0.2s;
+}
+.search-wrap:focus-within {
+  border-color: var(--accent);
+  background: rgba(255,255,255,0.08);
+}
+.search-wrap i { color: var(--text2); font-size: 18px; }
+.search-wrap input {
+  background: transparent;
+  border: none;
+  color: #fff;
+  padding: 10px;
+  width: 100%;
+  outline: none;
+  font-size: 14px;
+}
+.search-btn {
+  background: transparent;
+  border: none;
+  color: var(--accent);
+  cursor: pointer;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+}
+.search-btn:hover { color: #ff3333; }
+
+.topbar-right { display: flex; align-items: center; gap: 16px; }
+.icon-btn {
+  width: 40px; height: 40px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text2);
+  font-size: 20px;
+  text-decoration: none;
+  transition: 0.2s;
+}
+.icon-btn:hover { color: #fff; border-color: var(--accent); }
+.avatar {
+  width: 36px; height: 36px;
+  background: var(--accent);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 14px; color: #fff;
+}
+
+.icon-btn { position: relative; } /* Assure-toi que cette ligne existe pour le positionnement absolu */
+.notif-dot {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 8px;
+  height: 8px;
+  background-color: var(--accent);
+  border-radius: 50%;
+  border: 2px solid var(--panel); /* Crée un petit espace autour du point */
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(230, 32, 32, 0.7); }
+  70% { box-shadow: 0 0 0 6px rgba(230, 32, 32, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(230, 32, 32, 0); }
+}

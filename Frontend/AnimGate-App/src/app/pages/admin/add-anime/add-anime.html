@@ -1,0 +1,90 @@
+<div class="admin-page">
+  <div class="page-header">
+    <h2>Ajouter un anime</h2>
+    <button routerLink="/admin/catalogue" class="btn btn-outline">Retour</button>
+  </div>
+
+  <form (ngSubmit)="onSubmit()" class="admin-form">
+    <!-- Info Générales -->
+    <div class="form-section">
+      <h3>Informations générales</h3>
+      <div class="form-grid">
+        <div class="fg"><label>Titre *</label><input type="text" [(ngModel)]="form.title" name="title" required></div>
+        <div class="fg"><label>Titre japonais</label><input type="text" [(ngModel)]="form.title_japanese" name="title_japanese"></div>
+        <div class="fg"><label>Titre anglais</label><input type="text" [(ngModel)]="form.title_english" name="title_english"></div>
+        <div class="fg"><label>Studio</label><input type="text" [(ngModel)]="form.studio" name="studio"></div>
+
+        <div class="fg"><label>Type</label>
+          <select [(ngModel)]="form.type" name="type">
+            <option value="series">Série</option><option value="movie">Film</option>
+            <option value="ova">OVA</option><option value="ona">ONA</option><option value="special">Spécial</option>
+          </select>
+        </div>
+        <div class="fg"><label>Statut</label>
+          <select [(ngModel)]="form.status" name="status">
+            <option value="ongoing">En cours</option><option value="completed">Terminé</option>
+            <option value="upcoming">À venir</option><option value="hiatus">En pause</option>
+          </select>
+        </div>
+        <div class="fg"><label>Tranche d'âge</label>
+          <select [(ngModel)]="form.age_rating" name="age_rating">
+            <option value="all">Tout public</option><option value="pg13">13+</option>
+            <option value="pg16">16+</option><option value="r18">18+</option>
+          </select>
+        </div>
+        <div class="fg"><label>Nb. épisodes</label><input type="number" [(ngModel)]="form.total_episodes" name="total_episodes"></div>
+        <div class="fg"><label>Durée (min)</label><input type="number" [(ngModel)]="form.episode_duration" name="episode_duration"></div>
+        <div class="fg"><label>Année de sortie</label><input type="number" [(ngModel)]="form.release_year" name="release_year" min="1900" max="2100"></div>
+        <div class="fg full"><label>Synopsis</label><textarea rows="4" [(ngModel)]="form.synopsis" name="synopsis"></textarea></div>
+      </div>
+    </div>
+
+    <!-- Genres & Catégories -->
+    <div class="form-section">
+      <h3>Genres & Catégories (Maintenez Ctrl/Cmd pour sélectionner plusieurs)</h3>
+      <div class="form-grid">
+        <div class="fg">
+          <label>Genres</label>
+          <select multiple [(ngModel)]="form.genre_ids" name="genre_ids" style="height: 120px;">
+            @for (g of genresList; track g.id) {
+              <option [value]="g.id">{{ g.name }}</option>
+            }
+          </select>
+        </div>
+        <div class="fg">
+          <label>Catégories</label>
+          <select multiple [(ngModel)]="form.category_ids" name="category_ids" style="height: 120px;">
+            @for (c of categoriesList; track c.id) {
+              <option [value]="c.id">{{ c.name }}</option>
+            }
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Médias -->
+    <div class="form-section">
+      <h3>Médias</h3>
+      <div class="form-grid">
+        <div class="fg"><label>Cover (Portrait)</label><input type="file" accept="image/*" (change)="onFileChange($event, 'cover')"></div>
+        <div class="fg"><label>Banner (Paysage)</label><input type="file" accept="image/*" (change)="onFileChange($event, 'banner')"></div>
+        <div class="fg"><label>Lien Trailer</label><input type="url" [(ngModel)]="form.trailer_url" name="trailer_url"></div>
+      </div>
+    </div>
+
+    <!-- Toggles -->
+    <div class="form-section">
+      <h3>Mise en avant</h3>
+      <div class="toggle-grid">
+        <label class="toggle-item"><input type="checkbox" [(ngModel)]="form.is_featured" name="is_featured"><span>Hero Slider</span></label>
+        <label class="toggle-item"><input type="checkbox" [(ngModel)]="form.is_trending" name="is_trending"><span>Tendances</span></label>
+        <label class="toggle-item"><input type="checkbox" [(ngModel)]="form.is_new_release" name="is_new_release"><span>Nouvelle sortie</span></label>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="button" class="btn btn-outline" routerLink="/admin/catalogue">Annuler</button>
+      <button type="submit" class="btn btn-red">Enregistrer</button>
+    </div>
+  </form>
+</div>

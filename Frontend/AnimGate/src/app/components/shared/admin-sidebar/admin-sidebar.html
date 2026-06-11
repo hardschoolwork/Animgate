@@ -1,0 +1,48 @@
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <span class="logo">ANIM</span>
+    <span class="logo-accent">GATE</span>
+    <span class="admin-badge">Admin</span>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-label">Vue d'ensemble</div>
+    @for (item of navItems; track item.label) {
+      <a [routerLink]="item.route" [class.active]="item.route === currentRoute" class="nav-link">
+        <i class='bx {{ item.icon }}'></i> {{ item.label }}
+      </a>
+    }
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-label">Communauté</div>
+    @for (item of communityItems; track item.label) {
+      <a [routerLink]="item.route" [class.active]="item.route === currentRoute" class="nav-link">
+        <i class='bx {{ item.icon }}'></i> {{ item.label }}
+        @if (item.badge) { <span class="badge">{{ item.badge }}</span> }
+      </a>
+    }
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-label">Système</div>
+    @for (item of systemItems; track item.label) {
+      <a [routerLink]="item.route" [class.active]="item.route === currentRoute" class="nav-link">
+        <i class='bx {{ item.icon }}'></i> {{ item.label }}
+      </a>
+    }
+  </div>
+
+  <div class="user-section">
+    <div class="user-profile" routerLink="/admin/profile" title="Voir mon profil">
+      <div class="avatar admin-avatar">{{ getInitials() }}</div>
+      <div class="user-info">
+        <span>{{ user()?.username || 'Admin' }}</span>
+        <span class="role">Super Admin</span>
+      </div>
+    </div>
+    <a class="nav-link logout-link" (click)="logout()" routerLink="/landing">
+      <i class='bx bx-log-out'></i> Déconnexion
+    </a>
+  </div>
+</aside>

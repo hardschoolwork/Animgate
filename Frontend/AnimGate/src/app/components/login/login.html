@@ -1,0 +1,33 @@
+<div class="auth-container">
+  <div class="auth-box">
+    <div class="logo-header">ANIM<span>GATE</span></div>
+    <h2>Connexion</h2>
+    <p class="subtitle">Accède à ton espace personnel</p>
+
+    @if (error) {
+      <div class="alert-error">{{ error }}</div>
+    }
+
+    <form (ngSubmit)="onLogin()" class="auth-form">
+      <div class="form-group">
+        <label>Nom d'utilisateur</label>
+        <input type="text" [(ngModel)]="username" name="username" required placeholder="ton_username">
+      </div>
+      <div class="form-group">
+        <label>Mot de passe</label>
+        <input type="password" [(ngModel)]="password" name="password" required placeholder="••••••••">
+      </div>
+      <button type="submit" class="btn btn-red btn-full" [disabled]="loading">
+        @if (loading) { <i class='bx bx-loader-alt bx-spin'></i> Connexion... }
+        @else { <i class='bx bx-log-in'></i> Se connecter }
+      </button>
+    </form>
+
+    <div class="auth-footer">
+      Pas encore de compte ? <a routerLink="/register" class="link-accent">Créer un compte</a>
+    </div>
+    <div class="auth-footer">
+      <a routerLink="/landing" class="link-muted"><i class='bx bx-arrow-back'></i> Retour à l'accueil</a>
+    </div>
+  </div>
+</div>

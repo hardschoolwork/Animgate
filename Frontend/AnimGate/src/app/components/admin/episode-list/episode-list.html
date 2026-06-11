@@ -1,0 +1,142 @@
+<div class="app">
+  <app-admin-sidebar></app-admin-sidebar>
+  <main class="main">
+    <app-topbar></app-topbar>
+
+    <div class="page-header">
+      <div>
+        <h2><i class='bx bx-list-ul'></i> Épisodes : {{ animeTitle() || slug }}</h2>
+        <button class="btn-back" (click)="goBack()">
+          <i class='bx bx-arrow-back'></i> Retour au dashboard
+        </button>
+      </div>
+      <button class="btn-add" (click)="openAddForm()">
+        <i class='bx bx-plus'></i> Ajouter un épisode
+      </button>
+    </div>
+
+    @if (loading()) {
+      <div class="loader">Chargement des épisodes...</div>
+    }
+
+    @if (!loading()) {
+      @if (episodes().length > 0) {
+        <div class="table-wrap">
+          <table>
+            <thead>
+            <tr>
+              <th>N°</th>
+              <th>TITRE</th>
+              <th>DURÉE</th>
+              <th>DATE</th>
+              <th>FILLER</th>
+              <th>ACTIONS</th>
+            </tr>
+            </thead>
+            <tbody>
+              @for (ep of episodes(); track ep.id) {
+                <tr>
+                  <td><span class="ep-num">{{ ep.episode_number }}</span></td>
+                  <td>
+                    <div class="ep-title-cell">
+                      @if (ep.thumbnail) { <img [src]="ep.thumbnail" class="ep-thumb"> }
+                      <span>{{ ep.title }}</span>
+                    </div>
+                  </td>
+                  <td>{{ ep.duration_minutes || 24 }} min</td>
+                  <td>{{ ep.release_date | date:'dd/MM/yyyy' }}</td>
+                  <td>
+                    @if (ep.is_filler) { <span class="badge-filler">Oui</span> }
+                    @else { <span class="badge-no">Non</span> }
+                  </td>
+                  <td>
+                    <div class="action-btns">
+                      <button class="action-btn edit" (click)="openEditForm(ep)" title="Modifier">
+                        <i class='bx bx-edit'></i>
+                      </button>
+                      <button class="action-btn delete" (click)="deleteEpisode(ep.id)" title="Supprimer">
+                        <i class='bx bx-trash'></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      } @else {
+        <div class="empty-state">
+          <i class='bx bx-video'></i>
+          <h3>Aucun épisode</h3>
+          <p>Cet anime n'a pas encore d'épisodes ajoutés.</p>
+          <button class="btn-add" (click)="openAddForm()">
+            <i class='bx bx-plus'></i> Ajouter le premier épisode
+          </button>
+        </div>
+      }
+    }
+
+    <!-- MODAL FORMULAIRE (Add/Edit) -->
+    @if (showForm()) {
+      <div class="modal-overlay" (click)="showForm.set(false)">
+        <div class="modal-form" (click)="$event.stopPropagation()">
+          <div class="modal-header">
+            <h3>{{ isEditing() ? 'Modifier l\'épisode' : 'Ajouter un épisode' }}</h3>
+            <button class="close-btn" (click)="showForm.set(false)"><i class='bx bx-x'></i></button>
+          </div>
+
+          @if (error()) { <div class="alert-error">{{ error() }}</div> }
+
+          <form (ngSubmit)="submitForm()" class="form-grid">
+            <div class="form-group">
+              <label>Numéro d'épisode *</label>
+              <input type="number" [(ngModel)]="episode_number" name="episode_number" required min="1">
+            </div>
+            <div class="form-group full">
+              <label>Titre de l'épisode *</label>
+              <input type="text" [(ngModel)]="title" name="title" required placeholder="Ex: Le début de l'aventure">
+            </div>
+            <div class="form-group">
+              <label>Durée (minutes)</label>
+              <input type="number" [(ngModel)]="duration_minutes" name="duration_minutes" min="1">
+            </div>
+            <div class="form-group">
+              <label>Date de sortie</label>
+              <input type="date" [(ngModel)]="release_date" name="release_date">
+            </div>
+            <div class="form-group full">
+              <label>Description</label>
+              <textarea [(ngModel)]="description" name="description" rows="3"></textarea>
+            </div>
+
+            <div class="form-group">
+              <label>Fichier Vidéo</label>
+              <input type="file" accept="video/*" (change)="onVideoSelected($event)">
+              @if (videoPreview) { <video [src]="videoPreview" class="preview-media" controls></video> }
+            </div>
+            <div class="form-group">
+              <label>Thumbnail</label>
+              <input type="file" accept="image/*" (change)="onThumbnailSelected($event)">
+              @if (thumbnailPreview) { <img [src]="thumbnailPreview" class="preview-media img"> }
+            </div>
+
+            <div class="form-group full checkbox-group">
+              <label class="toggle-item">
+                <input type="checkbox" [(ngModel)]="is_filler" name="is_filler">
+                <span class="toggle-label">Ceci est un épisode Filler</span>
+              </label>
+            </div>
+
+            <div class="form-actions full">
+              <button type="button" class="btn-cancel" (click)="showForm.set(false)">Annuler</button>
+              <button type="submit" class="btn-submit" [disabled]="formLoading()">
+                @if (formLoading()) { <i class='bx bx-loader-alt bx-spin'></i> }
+                {{ isEditing() ? 'Enregistrer' : 'Ajouter' }}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    }
+  </main>
+</div>

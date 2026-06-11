@@ -1,0 +1,33 @@
+:root {
+  --bg: #0b0b0e;
+  --panel: #111114;
+  --accent: #e62020;
+  --text: #ffffff;
+  --text2: #8b8b95;
+  --border: #1e1e22;
+  --radius: 12px;
+  --hover: #1e1e24;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font-family: inherit;
+}

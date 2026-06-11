@@ -1,0 +1,217 @@
+<div class="app">
+  <app-admin-sidebar></app-admin-sidebar>
+  <main class="main">
+    <app-topbar></app-topbar>
+
+    <!-- HEADER -->
+    <div class="topbar">
+      <h2>DASHBOARD <span>ADMIN</span></h2>
+      <div class="topbar-right">
+        <button class="btn-add" routerLink="/admin/add">
+          <i class='bx bx-plus'></i> Ajouter anime
+        </button>
+      </div>
+    </div>
+
+    @if (loading()) {
+      <div class="loader">Chargement...</div>
+    }
+
+    @if (!loading()) {
+      <!-- STATS CARDS -->
+      <div class="stats">
+        <div class="stat-card">
+          <div class="stat-icon red"><i class='bx bx-movie-play'></i></div>
+          <div class="stat-info">
+            <h3>{{ stats().animes }}</h3>
+            <p>Animes au catalogue</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon orange"><i class='bx bx-user'></i></div>
+          <div class="stat-info">
+            <h3>{{ stats().users }}</h3>
+            <p>Utilisateurs inscrits</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon purple"><i class='bx bx-star'></i></div>
+          <div class="stat-info">
+            <h3>{{ stats().pendingSuggestions }}</h3>
+            <p>Recommandations en attente</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon blue"><i class='bx bx-tv'></i></div>
+          <div class="stat-info">
+            <h3>{{ stats().episodes }}</h3>
+            <p>Épisodes disponibles</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- CONTENT GRID -->
+      <div class="content-grid">
+        <!-- CATALOGUE -->
+        <div class="catalogue-section">
+          <div class="section-header">
+            <div class="section-title">
+              <i class='bx bx-film' style="color:var(--accent)"></i>
+              Catalogue Animes
+            </div>
+            <button class="btn-see-all" (click)="goToAllAnimes()">
+              Voir tout <i class='bx bx-right-arrow-alt'></i>
+            </button>
+          </div>
+
+          <div class="search-wrap">
+            <input
+              class="search-input"
+              placeholder="Rechercher par titre..."
+              [(ngModel)]="searchQuery"
+            >
+            <button class="btn-add" routerLink="/admin/add">
+              <i class='bx bx-plus'></i> Ajouter
+            </button>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+              <tr>
+                <th>TITRE</th>
+                <th>TYPE</th>
+                <th>STATUT</th>
+                <th>NOTE</th>
+                <th>ACTIONS</th>
+              </tr>
+              </thead>
+              <tbody>
+                @for (anime of filteredAnimes(); track anime.slug) {
+                  <tr>
+                    <td>
+                      <div class="anime-cell">
+                        @if (anime.cover_image) {
+                          <img [src]="anime.cover_image" class="anime-thumb" [alt]="anime.title">
+                        }
+                        <div class="anime-info">
+                          <h4>{{ anime.title }}</h4>
+                          <span>{{ anime.release_year || '—' }}</span>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <span class="type-badge">{{ getTypeLabel(anime.type) }}</span>
+                    </td>
+                    <td>
+                      <span class="status-badge" [class]="getStatusClass(anime.status)">
+                        {{ getStatusLabel(anime.status) }}
+                      </span>
+                    </td>
+                    <td>
+                      <span class="rating">
+                        <i class='bx bxs-star'></i> {{ anime.rating }}
+                      </span>
+                    </td>
+                    <td>
+                      <div class="action-btns">
+                        <button class="action-btn episodes" (click)="goToEpisodes(anime.slug)" title="Gérer les épisodes">
+                          <i class='bx bx-list-ul'></i>
+                        </button>
+                        <button class="action-btn view" (click)="goToAnimeDetail(anime.slug)" title="Voir">
+                          <i class='bx bx-show'></i>
+                        </button>
+                        <button class="action-btn edit" (click)="goToEditAnime(anime.slug)" title="Éditer">
+                          <i class='bx bx-edit'></i>
+                        </button>
+                        <button class="action-btn delete" (click)="confirmDelete(anime)" title="Supprimer">
+                          <i class='bx bx-trash'></i>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                }
+                @if (filteredAnimes().length === 0) {
+                  <tr>
+                    <td colspan="5" class="empty-row">Aucun anime trouvé</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- RECOMMANDATIONS -->
+        <div class="reco-panel">
+          <div class="reco-header">
+            <h3>Recommandations</h3>
+            <span class="reco-count">{{ stats().pendingSuggestions }} en attente</span>
+          </div>
+
+          @if (suggestions().length > 0) {
+            @for (s of suggestions(); track s.id) {
+              <div class="reco-item">
+                <div class="reco-top">
+                  <div class="reco-avatar">{{ s.suggested_anim.charAt(0) | uppercase }}</div>
+                  <div class="reco-info">
+                    <h4>{{ s.suggested_anim }}</h4>
+                    <span>{{ s.message | slice:0:45 }}{{ s.message.length > 45 ? '...' : '' }}</span>
+                  </div>
+                </div>
+
+                @if (s.state === 'pending') {
+                  <div class="reco-actions">
+                    <button class="reco-btn accept" (click)="handleSuggestion(s, 'accepted')">
+                      <i class='bx bx-check'></i> Accepter
+                    </button>
+                    <button class="reco-btn reject" (click)="handleSuggestion(s, 'rejected')">
+                      <i class='bx bx-x'></i> Refuser
+                    </button>
+                  </div>
+                } @else {
+                  <div class="reco-state" [class]="s.state">
+                    {{ s.state === 'accepted' ? 'Accepté' : 'Refusé' }}
+                  </div>
+                }
+              </div>
+            }
+
+            <button class="btn-see-all full-width" (click)="goToAllSuggestions()">
+              Voir toutes les recommandations <i class='bx bx-right-arrow-alt'></i>
+            </button>
+
+          } @else {
+            <div class="empty-reco">
+              <i class='bx bx-star'></i>
+              <p>Aucune recommandation</p>
+            </div>
+          }
+        </div>
+      </div>
+    }
+
+    <!-- MODAL DE CONFIRMATION SUPPRESSION -->
+    @if (showDeleteModal()) {
+      <div class="modal-overlay" (click)="cancelDelete()">
+        <div class="modal-content" (click)="$event.stopPropagation()">
+          <div class="modal-icon">
+            <i class='bx bx-trash'></i>
+          </div>
+          <h3>Supprimer cet anime ?</h3>
+          <p>
+            Êtes-vous sûr de vouloir supprimer <strong>{{ animeToDelete()?.title }}</strong> ?
+            Cette action est irréversible.
+          </p>
+          <div class="modal-actions">
+            <button class="btn-modal cancel" (click)="cancelDelete()">
+              <i class='bx bx-x'></i> Annuler
+            </button>
+            <button class="btn-modal delete" (click)="executeDelete()">
+              <i class='bx bx-trash'></i> Supprimer
+            </button>
+          </div>
+        </div>
+      </div>
+    }
+  </main>
+</div>

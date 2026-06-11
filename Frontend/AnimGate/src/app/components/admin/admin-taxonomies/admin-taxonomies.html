@@ -1,0 +1,84 @@
+<div class="app">
+  <app-admin-sidebar></app-admin-sidebar>
+  <main class="main">
+    <app-topbar></app-topbar>
+
+    <div class="page-header">
+      <h2><i class='bx bx-category'></i> Genres & Catégories</h2>
+    </div>
+
+    @if (loading()) {
+      <div class="loader">Chargement des données...</div>
+    }
+
+    @if (!loading()) {
+      <div class="taxonomies-grid">
+
+        <!-- SECTION GENRES -->
+        <div class="taxonomy-card">
+          <div class="card-header">
+            <h3><i class='bx bx-tag'></i> Genres</h3>
+            <span class="count">{{ genres().length }}</span>
+          </div>
+
+          <div class="add-form">
+            <input
+              type="text"
+              placeholder="Nouveau genre (ex: Isekai)"
+              [(ngModel)]="newGenreName"
+              (keyup.enter)="addGenre()"
+            >
+            <button class="btn-add-small" (click)="addGenre()" [disabled]="addingGenre()">
+              @if (addingGenre()) { <i class='bx bx-loader-alt bx-spin'></i> }
+              @else { <i class='bx bx-plus'></i> }
+            </button>
+          </div>
+
+          <ul class="item-list">
+            @for (genre of genres(); track genre.id) {
+              <li>
+                <span>{{ genre.name }}</span>
+                <button class="btn-delete" (click)="deleteGenre(genre.id)" title="Supprimer">
+                  <i class='bx bx-trash'></i>
+                </button>
+              </li>
+            }
+          </ul>
+        </div>
+
+        <!-- SECTION CATÉGORIES -->
+        <div class="taxonomy-card">
+          <div class="card-header">
+            <h3><i class='bx bx-grid-alt'></i> Catégories</h3>
+            <span class="count">{{ categories().length }}</span>
+          </div>
+
+          <div class="add-form">
+            <input
+              type="text"
+              placeholder="Nouvelle catégorie (ex: Shonen)"
+              [(ngModel)]="newCategoryName"
+              (keyup.enter)="addCategory()"
+            >
+            <button class="btn-add-small" (click)="addCategory()" [disabled]="addingCategory()">
+              @if (addingCategory()) { <i class='bx bx-loader-alt bx-spin'></i> }
+              @else { <i class='bx bx-plus'></i> }
+            </button>
+          </div>
+
+          <ul class="item-list">
+            @for (cat of categories(); track cat.id) {
+              <li>
+                <span>{{ cat.name }}</span>
+                <button class="btn-delete" (click)="deleteCategory(cat.id)" title="Supprimer">
+                  <i class='bx bx-trash'></i>
+                </button>
+              </li>
+            }
+          </ul>
+        </div>
+
+      </div>
+    }
+  </main>
+</div>

@@ -1,0 +1,16 @@
+<div class="topbar">
+  <div class="search-wrap">
+    <i class='bx bx-search'></i>
+    <input placeholder="Rechercher..." [(ngModel)]="searchQuery" (keyup.enter)="onSearch()">
+    <button class="search-btn" (click)="onSearch()"><i class='bx bx-arrow-to-right'></i></button>
+  </div>
+  <div class="topbar-right">
+    @if (!authService.isAdmin()) {
+      <a routerLink="/notifications" class="icon-btn" title="Notifications">
+        <i class='bx bx-bell'></i>
+        @if (hasUnreadNotifications()) { <span class="notif-dot"></span> }
+      </a>
+    }
+    <div class="avatar">{{ getInitials() }}</div>
+  </div>
+</div>

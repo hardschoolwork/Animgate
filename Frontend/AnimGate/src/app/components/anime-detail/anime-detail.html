@@ -1,0 +1,102 @@
+<div class="app">
+  <app-sidebar></app-sidebar>
+  <main class="main">
+    <app-topbar></app-topbar>
+
+    @if (loading()) {
+      <div class="loader">Chargement...</div>
+    }
+
+    @if (anime(); as a) {
+      <!-- HERO BANNER -->
+      <div class="hero-banner" [style.backgroundImage]="'url(' + a.banner_image + ')'">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+          @if (a.cover_image) {
+            <img [src]="a.cover_image" [alt]="a.title" class="hero-poster">
+          }
+          <div class="hero-info">
+            <h1>{{ a.title }}</h1>
+            @if (a.title_japanese) {
+              <div class="jp">{{ a.title_japanese }}</div>
+            }
+            <div class="hero-meta">
+              <span class="tag"><i class='bx bx-movie'></i> {{ a.type | titlecase }}</span>
+              <span class="tag"><i class='bx bx-check-circle'></i> {{ getStatusLabel(a.status) }}</span>
+              @if (a.release_year) {
+                <span class="tag"><i class='bx bx-calendar'></i> {{ a.release_year }}</span>
+              }
+              <span class="rating"><i class='bx bxs-star'></i> {{ a.rating }}</span>
+              <span class="tag"><i class='bx bx-list-ul'></i> {{ a.episodes_count }} Épisodes</span>
+              @if (a.studio) {
+                <span class="tag"><i class='bx bx-building-house'></i> {{ a.studio }}</span>
+              }
+            </div>
+            <div class="hero-actions">
+              <button class="btn btn-red" (click)="watchFirstEpisode()" [disabled]="episodes().length === 0">
+                <i class='bx bx-play'></i> Regarder
+              </button>
+
+              <!-- ✅ Bouton Favori dynamique -->
+              <button class="btn btn-outline" (click)="toggleFavorite()" [disabled]="favLoading()">
+                @if (favLoading()) {
+                  <i class='bx bx-loader-alt bx-spin'></i>
+                } @else if (isFavorite()) {
+                  <i class='bx bxs-heart' style="color: var(--accent)"></i> Retirer
+                } @else {
+                  <i class='bx bx-heart'></i> Favori
+                }
+              </button>
+
+              <button class="btn btn-outline"><i class='bx bx-share-alt'></i> Partager</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DETAILS GRID -->
+      <div class="detail-grid">
+        <div class="box">
+          <h2><i class='bx bx-info-circle'></i> Synopsis</h2>
+          <p class="syn">{{ a.synopsis || 'Aucun synopsis disponible pour le moment.' }}</p>
+        </div>
+        <div class="box">
+          <div class="info-row"><span class="label">Studio</span><span class="value">{{ a.studio || '—' }}</span></div>
+          <div class="info-row"><span class="label">Diffusion</span><span class="value">{{ a.release_year || '—' }}</span></div>
+          <div class="info-row"><span class="label">Genres</span><span class="value">{{ getGenresLabel(a.genres) }}</span></div>
+          <div class="info-row"><span class="label">Catégories</span><span class="value">{{ getCategoriesLabel(a.categories) }}</span></div>
+          <div class="info-row"><span class="label">Âge</span><span class="value">{{ a.age_rating | uppercase }}</span></div>
+        </div>
+      </div>
+
+      <!-- EPISODES -->
+      <h2 class="ep-title"><i class='bx bx-list-check'></i> Épisodes ({{ episodes().length }})</h2>
+      @if (episodes().length > 0) {
+        <div class="ep-grid">
+          @for (ep of episodes(); track ep.id) {
+            <div class="ep-card" (click)="watchEpisode(ep)">
+              <div class="ep-num">{{ ep.episode_number | number:'2.0-0' }}</div>
+              <div class="ep-info">
+                <h4>{{ ep.title }}</h4>
+                <span>
+                  <i class='bx bx-time'></i> {{ ep.duration_minutes || 0 }} min
+                  @if (ep.release_date) {
+                    • <i class='bx bx-calendar'></i> {{ ep.release_date | date:'dd MMM yyyy' }}
+                  }
+                  @if (ep.is_filler) {
+                    <span class="filler-tag">Filler</span>
+                  }
+                </span>
+              </div>
+            </div>
+          }
+        </div>
+      } @else {
+        <div class="empty-state">
+          <i class='bx bx-movie-play'></i>
+          <p>Aucun épisode disponible pour le moment.</p>
+        </div>
+      }
+    }
+  </main>
+</div>

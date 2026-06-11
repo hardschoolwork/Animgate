@@ -1,0 +1,66 @@
+@if (section) {
+  <!-- SLIDER -->
+  @if (section.slides.length > 0) {
+    <div class="slider-wrapper">
+      <button class="slider-arrow prev" (click)="prevSlide()">
+        <i class='bx bx-chevron-left'></i>
+      </button>
+      <div class="slider-slide">
+        @if (currentSlide) {
+          <div class="slider-bg" [style.backgroundImage]="'url(' + currentSlide.banner_image + ')'"></div>
+          <div class="slider-overlay"></div>
+          <div class="slider-content">
+            <h2 class="slider-title">{{ currentSlide.title }}</h2>
+            <p class="slider-desc">{{ currentSlide.synopsis }}</p>
+            <div class="slider-actions">
+              <button class="btn btn-outline">
+                <i class='bx bx-heart'></i> Favori
+              </button>
+              <button class="btn btn-primary" [routerLink]="['/anime', currentSlide.slug]">
+                <i class='bx bx-play'></i> Regarder maintenant
+              </button>
+              <button class="btn btn-outline" [routerLink]="['/anime', currentSlide.slug]">
+                <i class='bx bx-info-circle'></i> En savoir plus
+              </button>
+            </div>
+            <div class="slider-dots">
+              @for (slide of section.slides; track slide.id; let i = $index) {
+                <span class="dot" [class.active]="i === currentSlideIndex" (click)="goToSlide(i)"></span>
+              }
+            </div>
+          </div>
+        }
+      </div>
+      <button class="slider-arrow next" (click)="nextSlide()">
+        <i class='bx bx-chevron-right'></i>
+      </button>
+    </div>
+  }
+
+  <!-- CARDS GRID -->
+  @if (section.cards.length > 0) {
+    <div class="cards-grid">
+      @for (card of section.cards; track card.slug) {
+        <div class="card" (click)="goToFirstEpisode(card.slug)">
+          <div class="card-img">
+            @if (card.cover_image) {
+              <img [src]="card.cover_image" [alt]="card.title">
+            }
+            <div class="play-overlay">
+              <div class="play-btn"><i class='bx bx-play'></i></div>
+            </div>
+          </div>
+          <div class="card-info">
+            <div class="card-title">{{ card.title }}</div>
+            <div class="card-meta">
+              <span>{{ card.release_year || '—' }}</span>
+              <span class="rating">
+                <i class='bx bxs-star'></i> {{ card.rating }}
+              </span>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  }
+}

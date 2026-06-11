@@ -1,0 +1,193 @@
+<div class="app">
+  <app-admin-sidebar></app-admin-sidebar>
+  <main class="main">
+    <app-topbar></app-topbar>
+
+    <div class="page-header">
+      <h2><i class='bx bx-plus-circle'></i> Ajouter un anime</h2>
+      <button class="btn-back" routerLink="/admin/dashboard">
+        <i class='bx bx-arrow-back'></i> Retour
+      </button>
+    </div>
+
+    @if (success()) {
+      <div class="alert-success">
+        <i class='bx bx-check-circle'></i>
+        <span>Anime ajouté avec succès ! Redirection...</span>
+      </div>
+    }
+
+    @if (error()) {
+      <div class="alert-error">
+        <i class='bx bx-error-circle'></i>
+        <span>{{ error() }}</span>
+      </div>
+    }
+
+    <form class="form-container" (ngSubmit)="onSubmit()">
+      <!-- INFOS GÉNÉRALES -->
+      <div class="form-section">
+        <h3><i class='bx bx-info-circle'></i> Informations générales</h3>
+        <div class="form-grid">
+          <div class="form-group required">
+            <label>Titre *</label>
+            <input type="text" [(ngModel)]="title" name="title" required placeholder="Nom de l'anime">
+          </div>
+          <div class="form-group">
+            <label>Titre japonais</label>
+            <input type="text" [(ngModel)]="title_japanese" name="title_japanese" placeholder="Ex: 呪術廻戦">
+          </div>
+          <div class="form-group">
+            <label>Studio</label>
+            <input type="text" [(ngModel)]="studio" name="studio" placeholder="Ex: MAPPA">
+          </div>
+          <div class="form-group">
+            <label>Type</label>
+            <select [(ngModel)]="type" name="type">
+              <option value="series">Série</option>
+              <option value="movie">Film</option>
+              <option value="ova">OVA</option>
+              <option value="ona">ONA</option>
+              <option value="special">Spécial</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Statut</label>
+            <select [(ngModel)]="status" name="status">
+              <option value="ongoing">En cours</option>
+              <option value="completed">Terminé</option>
+              <option value="upcoming">À venir</option>
+              <option value="hiatus">En pause</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Tranche d'âge</label>
+            <select [(ngModel)]="age_rating" name="age_rating">
+              <option value="all">Tout public</option>
+              <option value="pg13">13 ans et plus</option>
+              <option value="pg16">16 ans et plus</option>
+              <option value="r18">18 ans et plus</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Durée épisode (min)</label>
+            <input type="number" [(ngModel)]="episode_duration" name="episode_duration" min="1" max="180">
+          </div>
+          <div class="form-group">
+            <label>Année de sortie</label>
+            <input type="number" [(ngModel)]="release_year" name="release_year" placeholder="2024" min="1950" max="2099">
+          </div>
+          <div class="form-group full-width">
+            <label>Synopsis</label>
+            <textarea [(ngModel)]="synopsis" name="synopsis" rows="4" placeholder="Description..."></textarea>
+          </div>
+          <div class="form-group full-width">
+            <label>Lien Trailer YouTube</label>
+            <input type="url" [(ngModel)]="trailer_url" name="trailer_url" placeholder="https://youtu.be/...">
+          </div>
+        </div>
+      </div>
+
+      <!-- GENRES & CATÉGORIES -->
+      <div class="form-section">
+        <h3><i class='bx bx-category'></i> Genres & Catégories</h3>
+        <div class="form-grid">
+          <div class="form-group full-width">
+            <label>Genres <span class="hint">(clique pour sélectionner)</span></label>
+            <div class="chip-container">
+              @if (genres().length > 0) {
+                @for (genre of genres(); track genre.id) {
+                  <button type="button" class="chip" [class.active]="selectedGenreIds().includes(genre.id)" (click)="toggleGenre(genre.id)">
+                    {{ genre.name }}
+                  </button>
+                }
+              } @else {
+                <span class="empty-state">Aucun genre disponible</span>
+              }
+            </div>
+          </div>
+          <div class="form-group full-width">
+            <label>Catégories <span class="hint">(clique pour sélectionner)</span></label>
+            <div class="chip-container">
+              @if (categories().length > 0) {
+                @for (cat of categories(); track cat.id) {
+                  <button type="button" class="chip" [class.active]="selectedCategoryIds().includes(cat.id)" (click)="toggleCategory(cat.id)">
+                    {{ cat.name }}
+                  </button>
+                }
+              } @else {
+                <span class="empty-state">Aucune catégorie disponible</span>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ✅ MISE EN AVANT (RÉINTÉGRÉE) -->
+      <div class="form-section">
+        <h3><i class='bx bx-star'></i> Mise en avant</h3>
+        <div class="toggles-grid">
+          <label class="toggle-item">
+            <input type="checkbox" [(ngModel)]="is_featured" name="is_featured">
+            <span class="toggle-label">
+              <i class='bx bx-slider-alt'></i> Hero Slider (is_featured)
+            </span>
+          </label>
+          <label class="toggle-item">
+            <input type="checkbox" [(ngModel)]="is_trending" name="is_trending">
+            <span class="toggle-label">
+              <i class='bx bx-trending-up'></i> Tendances (is_trending)
+            </span>
+          </label>
+        </div>
+      </div>
+
+      <!-- MÉDIAS -->
+      <div class="form-section">
+        <h3><i class='bx bx-image'></i> Médias</h3>
+        <div class="form-grid media-grid">
+          <div class="form-group">
+            <label>Cover portrait (2:3)</label>
+            <div class="file-upload" [class.has-file]="coverPreview">
+              @if (coverPreview) {
+                <img [src]="coverPreview" class="preview-img">
+              } @else {
+                <div class="file-placeholder">
+                  <i class='bx bx-image-add'></i>
+                  <span>Aucune image</span>
+                </div>
+              }
+              <input type="file" accept="image/*" (change)="onCoverSelected($event)" class="file-input">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Banner paysage (hero)</label>
+            <div class="file-upload" [class.has-file]="bannerPreview">
+              @if (bannerPreview) {
+                <img [src]="bannerPreview" class="preview-img banner">
+              } @else {
+                <div class="file-placeholder">
+                  <i class='bx bx-image-add'></i>
+                  <span>Aucune image</span>
+                </div>
+              }
+              <input type="file" accept="image/*" (change)="onBannerSelected($event)" class="file-input">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ACTIONS -->
+      <div class="form-actions">
+        <button type="button" class="btn btn-cancel" routerLink="/admin/dashboard">Annuler</button>
+        <button type="submit" class="btn btn-submit" [disabled]="loading()">
+          @if (loading()) {
+            <i class='bx bx-loader-alt bx-spin'></i> Enregistrement...
+          } @else {
+            <i class='bx bx-check'></i> Enregistrer
+          }
+        </button>
+      </div>
+    </form>
+  </main>
+</div>

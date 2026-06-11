@@ -1,0 +1,54 @@
+<div class="app">
+  <app-sidebar></app-sidebar>
+  <main class="main">
+    <app-topbar></app-topbar>
+
+    <div class="page-header">
+      <h2><i class='bx bx-heart'></i> Mes Favoris</h2>
+    </div>
+
+    @if (loading()) {
+      <div class="loader">Chargement...</div>
+    }
+
+    @if (!loading() && favorites().length > 0) {
+      <div class="cards-grid">
+        @for (fav of favorites(); track fav.id) {
+          <div class="card" [routerLink]="['/anime', fav.anim_detail.slug]">
+            <div class="card-img">
+              @if (fav.anim_detail.cover_image) {
+                <img [src]="fav.anim_detail.cover_image" [alt]="fav.anim_detail.title">
+              } @else {
+                <div class="no-image"><i class='bx bx-image'></i></div>
+              }
+              <!-- Bouton Play au survol (comme sur la home) -->
+              <div class="play-overlay">
+                <div class="play-btn"><i class='bx bx-play'></i></div>
+              </div>
+              <!-- Bouton retirer (empêche la navigation quand on clique dessus) -->
+              <button class="remove-fav-btn" (click)="$event.stopPropagation(); removeFavorite(fav.id)" title="Retirer des favoris">
+                <i class='bx bx-x'></i>
+              </button>
+            </div>
+            <div class="card-info">
+              <div class="card-title">{{ fav.anim_detail.title }}</div>
+              <div class="card-meta">
+                <span>{{ fav.anim_detail.release_year || '—' }}</span>
+                <span class="rating"><i class='bx bxs-star'></i> {{ fav.anim_detail.rating }}</span>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    } @else if (!loading()) {
+      <div class="empty-state">
+        <i class='bx bx-heart'></i>
+        <h3>Aucun favori</h3>
+        <p>Explorez le catalogue et ajoutez des animes à vos favoris !</p>
+        <a routerLink="/home" class="btn-explore">
+          <i class='bx bx-compass'></i> Explorer
+        </a>
+      </div>
+    }
+  </main>
+</div>

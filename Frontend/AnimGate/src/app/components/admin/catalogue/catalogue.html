@@ -1,0 +1,44 @@
+<div class="app">
+  <app-admin-sidebar></app-admin-sidebar>
+  <main class="main">
+    <app-topbar></app-topbar>
+
+    @if (loading()) { <div class="loader">Chargement...</div> }
+
+    @if (!loading()) {
+      <div class="search-wrap">
+        <input class="search-input" placeholder="Rechercher par titre ou slug..." [(ngModel)]="searchQuery">
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+          <tr><th>TITRE</th><th>TYPE</th><th>STATUT</th><th>ACTIONS</th></tr>
+          </thead>
+          <tbody>
+            @for (anime of filteredAnimes(); track anime.slug) {
+              <tr>
+                <td>
+                  <div class="anime-cell">
+                    @if (anime.cover_image) { <img [src]="anime.cover_image" class="anime-thumb"> }
+                    <div class="anime-info"><h4>{{ anime.title }}</h4><span>{{ anime.release_year || '—' }}</span></div>
+                  </div>
+                </td>
+                <td><span class="type-badge">{{ anime.type }}</span></td>
+                <td><span class="status-badge" [class]="anime.status === 'ongoing' ? 'status-ongoing' : 'status-ended'">{{ anime.status }}</span></td>
+                <td>
+                  <div class="action-btns">
+                    <button class="action-btn episodes" (click)="goToEpisodes(anime.slug)" title="Épisodes"><i class='bx bx-list-ul'></i></button>
+                    <button class="action-btn edit" (click)="goToEdit(anime.slug)" title="Modifier"><i class='bx bx-edit'></i></button>
+                    <button class="action-btn delete" (click)="deleteAnime(anime.slug)" title="Supprimer"><i class='bx bx-trash'></i></button>
+                  </div>
+                </td>
+              </tr>
+            }
+            @if (filteredAnimes().length === 0) { <tr><td colspan="4" class="empty-row">Aucun résultat</td></tr> }
+          </tbody>
+        </table>
+      </div>
+    }
+  </main>
+</div>
