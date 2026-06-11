@@ -1,0 +1,104 @@
+# ==============================================================================
+# 1. IDE & ÉDITEURS DE CODE (Ce que tu as spécifiquement demandé)
+# ==============================================================================
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.project
+.classpath
+.settings/
+*.sublime-workspace
+*.sublime-project
+
+# ==============================================================================
+# 2. SYSTÈME D'EXPLOITATION
+# ==============================================================================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+
+# ==============================================================================
+# 3. FRONTEND (Angular / Node.js)
+# ==============================================================================
+# Dépendances (ne jamais pusher, elles sont reinstallées via package.json)
+frontend/node_modules/
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+frontend/.pnp
+frontend/.pnp.js
+
+# Dossiers de compilation et de cache (générés par 'ng build')
+frontend/dist/
+frontend/build/
+frontend/.angular/
+frontend/.nx/
+
+# Variables d'environnement (CONTIENNENT DES SECRETS, NE JAMAIS PUSHER)
+frontend/.env
+frontend/.env.local
+frontend/.env.development.local
+frontend/.env.test.local
+frontend/.env.production.local
+
+# ==============================================================================
+# 4. BACKEND (Django / Python)
+# ==============================================================================
+# Environnements virtuels Python (ne jamais pusher)
+backend/venv/
+backend/env/
+backend/.venv/
+backend/ENV/
+
+# Fichiers compilés Python et cache
+backend/__pycache__/
+backend/*.py[cod]
+backend/*$py.class
+backend/*.so
+backend/.Python
+
+# Base de données locale (si tu utilises SQLite)
+backend/db.sqlite3
+backend/db.sqlite3-journal
+
+# Fichiers de médias et fichiers statiques collectés (générés ou uploadés)
+# On ignore le contenu, mais on peut garder un .gitkeep si besoin
+backend/media/*
+!backend/media/.gitkeep
+backend/staticfiles/
+backend/static_root/
+
+# Variables d'environnement Django (CONTIENNENT LA SECRET_KEY, NE JAMAIS PUSHER)
+backend/.env
+backend/.env.local
+backend/.env.prod
+
+# Journaux et rapports
+backend/*.log
+backend/local_settings.py
+
+# ==============================================================================
+# 5. RACINE DU PROJET (Monorepo)
+# ==============================================================================
+.env
+.env.local
+.env.production
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+
+# ==============================================================================
+# 6. GIT SPÉCIFIQUE
+# ==============================================================================
+# Ignorer les fichiers de fusion Git
+*.orig
+MERGE-HEAD
+MERGE_MSG
+FETCH_HEAD
