@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: '/api',
+  apiUrl: 'https://aniverse-backend-q1wh.onrender.com/api',
 };
